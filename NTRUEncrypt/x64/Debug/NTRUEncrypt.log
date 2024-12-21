@@ -1,0 +1,17 @@
+﻿  main.cpp
+C:\Users\18242\Desktop\Cplusplus\CPQSSAP\NTRU.h(23,31): warning C4114: 多次使用同一类型限定符
+  (编译源文件“main.cpp”)
+  
+C:\Users\18242\Desktop\Cplusplus\CPQSSAP\NTRU.h(24,31): warning C4114: 多次使用同一类型限定符
+  (编译源文件“main.cpp”)
+  
+C:\Users\18242\Desktop\Cplusplus\CPQSSAP\NTRU.h(25,31): warning C4114: 多次使用同一类型限定符
+  (编译源文件“main.cpp”)
+  
+C:\Users\18242\Desktop\Cplusplus\CPQSSAP\NTRU.h(26,31): warning C4114: 多次使用同一类型限定符
+  (编译源文件“main.cpp”)
+  
+C:\Users\18242\Desktop\Cplusplus\CPQSSAP\NTRU.h(27,31): warning C4114: 多次使用同一类型限定符
+  (编译源文件“main.cpp”)
+  
+  NTRUEncrypt.vcxproj -> C:\Users\18242\Desktop\Cplusplus\CPQSSAP\x64\Debug\NTRUEncrypt.exe
