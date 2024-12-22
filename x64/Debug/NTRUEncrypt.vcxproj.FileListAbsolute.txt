@@ -1,1 +1,2 @@
 C:\Users\18242\Desktop\c++\NTRUEncrypt\x64\Debug\NTRUEncrypt.exe
+C:\Users\18242\Desktop\c++\CPQSSAP\x64\Debug\NTRUEncrypt.exe

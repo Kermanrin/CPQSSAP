@@ -20,7 +20,7 @@ int main() {
     cout << endl;
     ntr.get_sk_g().print_pol();
     cout << endl;
-    Polynomial p = ntr.get_sk_f().Pol_mul(  ntr.get_sk_g()); //²âÊÔ¾í»ı x^2 + x + 1 con x^ - x - 1 = -x^2 - x - 1 mod x^3 - 1
+    Polynomial p = ntr.get_sk_f().Pol_mul(ntr.get_sk_g()); //æµ‹è¯•å·ç§¯ x^2 + x + 1 con x^ - x - 1 = -x^2 - x - 1 mod x^3 - 1
     p.print_pol();
 
     return 0;

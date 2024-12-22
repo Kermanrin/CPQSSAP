@@ -7,7 +7,7 @@
 class NTRU {
 public:
     NTRU(const unsigned int N , const unsigned int q, const unsigned int p) : f(Polynomial(N, q, p)), g(Polynomial(N, q, p)) {};
-    NTRU(const unsigned int N, const unsigned int q, const unsigned int p, const unsigned int a) : f(Polynomial(N, q, p, a, true)), g(Polynomial(N, q, p, a, false)) {};
+    NTRU(const unsigned int N, const unsigned int q, const unsigned int p, const unsigned int a) : f(Polynomial(N, q, p, a, a - 1, true)), g(Polynomial(N, q, p, a, a, false)) {};
     NTRU(const unsigned int N, const unsigned int q, const unsigned int p, const unsigned int a, const unsigned int b)
         : f(Polynomial(N, q, p, a, b, true)), g(Polynomial(N, q, p, a, b, false)) {};
     NTRU(Polynomial f, Polynomial g) : f(f), g(g) {};
@@ -30,6 +30,7 @@ private:
     Polynomial h;//¹«Ô¿
     Polynomial f_q;//f mod qµÄÄæ
     Polynomial f_p;// f mod p µÄÄæ
+    
 };
 
 

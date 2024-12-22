@@ -7,6 +7,7 @@
 #include <cmath>
 
 typedef std::complex<double> cd;
+typedef long long ll;
 
 class Polynomial {
 private:
@@ -14,21 +15,24 @@ private:
     unsigned int degree;//存储多项式的阶数 = NTRU static N
     unsigned int q;//多项式模数 = NTRU static q
     unsigned int p;
-    unsigned int a;//代表多项式有a个1
-    unsigned int b;//代表多项式有b个-1
+    unsigned int cnt_1;//代表多项式有a个1
+    unsigned int cnt_neg1;//代表多项式有b个-1
     //因为多项式需要mod q mod X^N - 1;
+    ll PowerMod(ll aa, ll n, ll mod);
 
 public:
     Polynomial() {};
+    Polynomial(unsigned int d, unsigned int _q, unsigned int p, unsigned int a, unsigned int b, std::vector<int> vec): degree(d), q(_q), p(p), cnt_1(a), cnt_neg1(b), coeffs(vec) {};
     Polynomial(unsigned int d, unsigned int _q, unsigned int p) : coeffs(gen_Pol(d, 1, 1)), degree(d), q(_q), p(p) {};
     Polynomial(unsigned int d, unsigned int _q, unsigned int p, unsigned int a, unsigned int b, bool if_Need_inversable = false) ;
     Polynomial(unsigned int d, unsigned int _q, unsigned int p, unsigned int a, bool if_Need_inversable = false);
 
-    bool test_If_Inversable(const std::vector<int>& coeffs, unsigned int d);
     std::vector<int> gen_Pol(unsigned int d, unsigned a, unsigned b);
     std::vector<int> gen_Pol_inverse(unsigned int d, unsigned a, unsigned b);
+    bool test_If_Inversable(const std::vector<int>& coeffs, unsigned int d);
     // 计算多项式的模运算 (对 x^d - 1 取模)
-    std::vector<int> poly_mod(const std::vector<int>& poly, unsigned int d);
+    std::vector<int> poly_mod_XN(std::vector<int>& poly, unsigned int d, unsigned int p);
+    std::vector<int> poly_mod_p(std::vector<int>& poly, unsigned int p);
     // 计算两个多项式的最大公因数
     std::vector<int> poly_gcd(const std::vector<int>& a, const std::vector<int>& b);
     // 辅助函数：去除多项式前导零
@@ -51,10 +55,11 @@ public:
     
     std::vector<int> get_coeffs() const;
     void print_pol();
-    std::vector<int> Cal_Inverse_Of_Polynomial(std::vector<int> pol, unsigned int q);
+    std::vector<int> Cal_Inverse_Of_Polynomial(std::vector<int> pol, unsigned int q, unsigned int degree);
+    Polynomial Cal_Inverse_Of_Polynomial(Polynomial poly, unsigned q, unsigned int degree);
 
     template<typename T>
-    T Cal_Inverse_Of_Polynomial(const T& obj);
+    T Cal_Inverse_Of_Polynomial(const T& obj, unsigned q, unsigned int degree);
 };
 
 #endif
