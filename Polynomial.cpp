@@ -12,31 +12,7 @@
 typedef std::complex<double> cd;
 typedef long long ll;
 
-Polynomial::Polynomial(unsigned int d, std::vector<int> c, unsigned int _q) {
-    assert((unsigned int)c.size() == d);
-    degree = d;
-    q = _q;
-    for (int i = 0; i < d; i++) {
-        coeffs.push_back(c[i]);
-    }
-};
-Polynomial::Polynomial(std::vector<int> c, unsigned int _q) :q(_q), degree(c.size()){
-    for (int i = 0; i < c.size(); i++) {
-        this->coeffs.push_back(c[i]);
-    }
-};
-
-Polynomial::Polynomial(unsigned int d, unsigned int _q, unsigned int p, unsigned int a, bool if_Need_inversable): degree(d), q(_q), p(p), cnt_1(a), cnt_neg1(a) {
-
-    if (if_Need_inversable) {
-        coeffs = gen_Pol_inverse(d, a, a - 1);
-    }
-    else {
-        coeffs = gen_Pol(d, a, a);
-    }
-}
-
-Polynomial::Polynomial(unsigned int d, unsigned int _q, unsigned int p, unsigned int a, unsigned int b, bool if_Need_inversable) : degree(d), q(_q), p(p), cnt_1(a), cnt_neg1(b) {
+Polynomial::Polynomial(unsigned int d, unsigned int q, unsigned int p, unsigned int a, unsigned int b, bool if_Need_inversable) : degree(d), q(q), p(p), cnt_1(a), cnt_neg1(b) {
 
     if (if_Need_inversable) {
         coeffs = gen_Pol_inverse(d, a, b);
@@ -70,6 +46,11 @@ std::vector<int> Polynomial::gen_Pol_inverse(unsigned int d, unsigned a, unsigne
 
 bool Polynomial::test_If_Inversable(const std::vector<int>& coeffs, unsigned int d) {
     return coeffs[0] != 0;
+}
+
+bool Polynomial::test_If_Inversable(const unsigned int d) {
+    std::vector<int> vec = this->coeffs;
+    return test_If_Inversable(vec, d);
 }
 
 std::vector<int> Polynomial::poly_mod_XN(std::vector<int>& poly, unsigned int d, unsigned int p) {
@@ -109,14 +90,18 @@ ll Polynomial::PowerMod(ll aa, ll nn, ll mod) {
     return c;
 }
 
-std::vector<int> Polynomial::Cal_Inverse_Of_Polynomial(std::vector<int> const pol, unsigned int q, unsigned int degree) {
-    return { 0 };
+Polynomial Polynomial::Cal_Inverse_Of_Polynomial(unsigned int mod) {
+    return Polynomial(degree, q, p, {0});
 }
 
+Polynomial Polynomial::Cal_Inverse_Of_Polynomial(std::vector<int> pol, unsigned int q, unsigned int degree) {
+    return Polynomial(degree, q, p, { 0 });
+    
+}
 
 Polynomial Polynomial::operator+(const Polynomial& other) const {
     unsigned int deg = std::max(coeffs.size(), other.coeffs.size());
-    unsigned int mod = NTRU::q;
+    unsigned int mod = q;
     std::vector<int> res(deg, 0);
     int cnt = 0;
     while (cnt < coeffs.size() && cnt < other.coeffs.size()) {
@@ -131,12 +116,12 @@ Polynomial Polynomial::operator+(const Polynomial& other) const {
         res[cnt] = other.coeffs[cnt];
         cnt++;
     }
-    return Polynomial(deg, this->q, this->p, -1, -1, res);
+    return Polynomial(deg, q, p, res);
 }
 
 Polynomial Polynomial::Pol_add(const Polynomial& other) const {
     unsigned int deg = std::max(coeffs.size(), other.coeffs.size());
-    unsigned int mod = NTRU::q;
+    unsigned int mod = q;
     std::vector<int> res(deg, 0);
     int cnt = 0;
     while (cnt < coeffs.size() && cnt < other.coeffs.size()) {
@@ -151,12 +136,12 @@ Polynomial Polynomial::Pol_add(const Polynomial& other) const {
         res[cnt] = other.coeffs[cnt];
         cnt++;
     }
-    return Polynomial(deg, this -> q, this -> p, -1, -1, res);
+    return Polynomial(deg, q, p, res);
 }
 
 Polynomial Polynomial::operator-(const Polynomial& other) const {
     unsigned int deg = std::max(coeffs.size(), other.coeffs.size());
-    unsigned int mod = NTRU::q;
+    unsigned int mod = q;
     std::vector<int> res(deg, 0);
     int cnt = 0;
     while (cnt < coeffs.size() && cnt < other.coeffs.size()) {
@@ -171,12 +156,12 @@ Polynomial Polynomial::operator-(const Polynomial& other) const {
         res[cnt] = other.coeffs[cnt];
         cnt++;
     }
-    return Polynomial(deg, this->q, this->p, -1, -1, res);
+    return Polynomial(deg, q, p, res);
 }
 
 Polynomial Polynomial::Pol_sub(const Polynomial& other) const {
     unsigned int deg = std::max(coeffs.size(), other.coeffs.size());
-    unsigned int mod = NTRU::q;
+    unsigned int mod = q;
     std::vector<int> res(deg, 0);
     int cnt = 0;
     while (cnt < coeffs.size() && cnt < other.coeffs.size()) {
@@ -191,7 +176,7 @@ Polynomial Polynomial::Pol_sub(const Polynomial& other) const {
         res[cnt] = other.coeffs[cnt];
         cnt++;
     }
-    return Polynomial(deg, this->q, this->p, -1, -1, res);
+    return Polynomial(deg, q, p, res);
 }
 
 std::vector<int> Polynomial::get_coeffs() const {
@@ -241,17 +226,17 @@ Polynomial Polynomial::operator*(const Polynomial& other)  {
     std::vector<int> B = other.get_coeffs();
     int m = A.size();
     int n = B.size();
-    std::vector<int> C(NTRU::N, 0);
+    std::vector<int> C(degree, 0);
     for (int i = 0; i < m; i++) {
-        for (int j = 0; j < n && i + j < NTRU::N; j++) {
+        for (int j = 0; j < n && i + j < degree; j++) {
             C[i + j] += A[i] * B[j];
         }
-        for (int j = std::max(0, int(NTRU::N - i)); j < n; j++) {
-            C[i + j - NTRU::N] += A[i] * B[j];
+        for (int j = std::max(0, int(degree - i)); j < n; j++) {
+            C[i + j - degree] += A[i] * B[j];
         }
     }
     int deg = C.size();
-    return Polynomial(deg, this->q, this->p, -1, -1, C);
+    return Polynomial(deg, q, p, C);
 }
 Polynomial Polynomial::Pol_mul(const Polynomial& other) {
     /*std::vector<int> A = get_coeffs();
@@ -277,11 +262,11 @@ Polynomial Polynomial::Pol_mul(const Polynomial& other) {
     std::vector<int> B = other.get_coeffs();
     int m = A.size();
     int n = B.size();
-    std::vector<int> C(NTRU::N * 2 - 1);
+    std::vector<int> C(degree * 2 - 1);
     for (int i = 0; i < m; i++) {
         for (int j = 0; j < n; j++) {
             C[i + j] += A[i] * B[j];
         }
     }
-    return Polynomial(d, this->q, this->p, -1, -1, poly_mod_XN(C, d, p));
+    return Polynomial(d, q, p, poly_mod_XN(C, d, p));
 }
