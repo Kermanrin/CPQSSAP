@@ -24,7 +24,7 @@ public:
 
 private:
     friend class Polynomial;
-    int security_level_table[4][7] = { {3, 3, 100, 2, 0, 1, 1},{512, 3, 10000001, 10000, 10000, 10000, 9999},{768, 3, 10000001, 10000, 9999}, {1024, 3, 10000001, 10000, 9999} };
+    int security_level_table[4][7] = { {3, 3, 100, 2, 0, 1, 1},{251, 3, 257, 72, 71, 72, 72},{768, 3, 10000001, 10000, 9999}, {1024, 3, 10000001, 10000, 9999} };
     int security_level;
     unsigned int const N;
     unsigned int const p;//通常为3,不特属于某个成员的变量，必须在类外初始化

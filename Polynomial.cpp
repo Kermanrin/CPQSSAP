@@ -57,15 +57,12 @@ std::vector<int> Polynomial::poly_mod_XN(std::vector<int>& poly, unsigned int d,
     int len = poly.size();
     for (int i = d; i < len; i++) {
         int j = i % d;
-        if (poly[i] == 1) {
-            poly[j] += 1;
-        }
-        else if (poly[i] == -1) {
-            poly[j] += -1;
+        if (poly[i] != 0) {
+            poly[j] = (poly[j] + poly[i]) % p;
         }
     }
     poly.resize(d);
-    return poly_mod_p(poly, p);
+    return poly;
 }
 
 std::vector<int> Polynomial::poly_mod_p(std::vector<int>& poly, unsigned int p) {
@@ -91,12 +88,95 @@ ll Polynomial::PowerMod(ll aa, ll nn, ll mod) {
 }
 
 Polynomial Polynomial::Cal_Inverse_Of_Polynomial(unsigned int mod) {
-    return Polynomial(degree, q, p, {0});
+    const int n = degree;
+    std::cout << "n:" << n << std::endl;
+    std::vector<int> a(3 * n + 1, 0);
+    for (int i = 0; i < n; i++) a[i] = coeffs[i];
+    std::vector<int> b(3 * n + 1, 0);
+    int g = 3, gi = 46;
+    std::vector<int> rev(3 * n + 1, 0);
+    std::vector<int> ta(3 * n + 1, 0);
+    std::vector<int> tb(3 * n + 1, 0);
+
+    NTT_solve(n, a, b, mod, rev, ta, tb, g, gi);
+    //for (int i = 0; i < 3 * degree + 1; i++) std::cout << b[i] << " ";
+    //std::cout << std::endl;
+    b = poly_mod_XN(b, degree, mod);
+
+    return Polynomial(degree, q, p, b);
 }
 
 Polynomial Polynomial::Cal_Inverse_Of_Polynomial(std::vector<int> pol, unsigned int q, unsigned int degree) {
     return Polynomial(degree, q, p, { 0 });
     
+}
+
+void Polynomial::NTT_solve(int len, std::vector<int>& a, std::vector<int>& b, int mod, std::vector<int> &rev, std::vector<int>& ta, std::vector<int>& tb,
+    int g, int gi) {
+    if (len == 1) {
+        b[0] = Poly_qmi(a[0], mod - 2, mod);
+        return;
+    }
+    NTT_solve((len + 1) >> 1, a, b, mod, rev, ta, tb, g, gi);
+    int l = 1, bit = 0;
+    while(l <= len + degree) {
+        l <<= 1;
+        ++bit;
+    }
+    NTT_pre(bit, rev);
+    for (int i = 0; i < l; ++i) {
+        ta[i] = a[i];
+        tb[i] = (i < ((len + 1) >> 1) ? b[i] : 0);
+    }
+    NTT(ta, l, 1, rev, g, gi, mod);
+    NTT(tb, l, 1, rev, g, gi, mod);
+    for (int i = 0; i < l; ++i) {
+        ta[i] = tb[i] * ((2 - ta[i] * tb[i]) % mod) % mod;
+    }
+    NTT(ta, l, 0, rev, g, gi, mod);
+    int inv = Poly_qmi(l, mod - 2, mod);
+    for (int i = 0; i < len; ++i) {
+        b[i] = ta[i] * inv % mod;
+    }
+}
+
+int Polynomial::Poly_qmi(int a, int n, int mod) {
+    int res = 1;
+    while (n) {
+        if (n & 1) {
+            a = a * res % mod;
+        }
+        a = a * a % mod;
+        n >>= 1;
+    }
+    return res;
+}
+
+void Polynomial::NTT_pre(int bit, std::vector<int>& rev) {
+    for (int i = 0; i < (1 << bit); ++i) {
+        rev[i] = (rev[i >> 1] >> 1) | ((i & 1) << (bit - 1));
+    }
+}
+
+void Polynomial::NTT(std::vector<int>& F, int len, int on, std::vector<int> & rev, int g, int gi, int mod) {
+    for (int i = 0; i < len; ++i) {
+        if (i < rev[i]) {
+            std::swap(F[i], F[rev[i]]);
+        }
+    }
+    for (int i = 2; i <= len; i <<= 1) {
+        int gn = Poly_qmi(on ? g : gi, (mod - 1) / i, mod);
+        for (int j = 0; j < len; j += i) {
+            int gg = 1;
+            for (int k = j; k < j + i / 2; k++) {
+                int u = F[k];
+                int v = gg * F[k + i / 2] % mod;
+                F[k] = (u + v) % mod;
+                F[k + i / 2] = (u - v) % mod;
+                gg = gg * gn % mod;
+            }
+        }
+    }
 }
 
 Polynomial Polynomial::operator+(const Polynomial& other) const {

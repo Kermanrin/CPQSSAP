@@ -54,6 +54,11 @@ public:
     void print_pol();
     Polynomial Cal_Inverse_Of_Polynomial(std::vector<int> pol, unsigned int q, unsigned int degree);
     Polynomial Cal_Inverse_Of_Polynomial(unsigned int mod);
+    int Poly_qmi(int a, int n, int mod);
+    void NTT_pre(int bit, std::vector<int>& rev);
+    void NTT(std::vector<int>& F, int len, int on, std::vector<int>& rev, int g, int gi, int mod);
+    void NTT_solve(int n, std::vector<int>& a, std::vector<int>& b, int mod, std::vector<int>& rev, std::vector<int>& ta, std::vector<int>& tb,
+        int g, int gi);
 
     template<typename T>
     T Cal_Inverse_Of_Polynomial(const T& obj, unsigned q, unsigned int degree);

@@ -1,21 +1,19 @@
-﻿  NTRU.cpp
-  Polynomial.cpp
+﻿  Polynomial.cpp
 C:\Users\18242\Desktop\c++\CPQSSAP\Polynomial.cpp(29,23): warning C4018: “<”: 有符号/无符号不匹配
 C:\Users\18242\Desktop\c++\CPQSSAP\Polynomial.cpp(57,13): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
-C:\Users\18242\Desktop\c++\CPQSSAP\Polynomial.cpp(72,13): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
-C:\Users\18242\Desktop\c++\CPQSSAP\Polynomial.cpp(103,22): warning C4267: “初始化”: 从“size_t”转换到“unsigned int”，可能丢失数据
-C:\Users\18242\Desktop\c++\CPQSSAP\Polynomial.cpp(123,22): warning C4267: “初始化”: 从“size_t”转换到“unsigned int”，可能丢失数据
-C:\Users\18242\Desktop\c++\CPQSSAP\Polynomial.cpp(143,22): warning C4267: “初始化”: 从“size_t”转换到“unsigned int”，可能丢失数据
-C:\Users\18242\Desktop\c++\CPQSSAP\Polynomial.cpp(163,22): warning C4267: “初始化”: 从“size_t”转换到“unsigned int”，可能丢失数据
-C:\Users\18242\Desktop\c++\CPQSSAP\Polynomial.cpp(196,11): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
-C:\Users\18242\Desktop\c++\CPQSSAP\Polynomial.cpp(218,11): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
-C:\Users\18242\Desktop\c++\CPQSSAP\Polynomial.cpp(227,11): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
-C:\Users\18242\Desktop\c++\CPQSSAP\Polynomial.cpp(228,11): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
-C:\Users\18242\Desktop\c++\CPQSSAP\Polynomial.cpp(231,40): warning C4018: “<”: 有符号/无符号不匹配
-C:\Users\18242\Desktop\c++\CPQSSAP\Polynomial.cpp(238,13): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
-C:\Users\18242\Desktop\c++\CPQSSAP\Polynomial.cpp(263,11): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
-C:\Users\18242\Desktop\c++\CPQSSAP\Polynomial.cpp(264,11): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
-  main.cpp
-  正在生成代码...
-C:\Users\18242\Desktop\c++\CPQSSAP\Polynomial.cpp(222): warning C4717: “Polynomial::IFFT”: 如递归所有控件路径，函数将导致运行时堆栈溢出
+C:\Users\18242\Desktop\c++\CPQSSAP\Polynomial.cpp(69,13): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+C:\Users\18242\Desktop\c++\CPQSSAP\Polynomial.cpp(122,13): warning C4018: “<=”: 有符号/无符号不匹配
+C:\Users\18242\Desktop\c++\CPQSSAP\Polynomial.cpp(183,22): warning C4267: “初始化”: 从“size_t”转换到“unsigned int”，可能丢失数据
+C:\Users\18242\Desktop\c++\CPQSSAP\Polynomial.cpp(203,22): warning C4267: “初始化”: 从“size_t”转换到“unsigned int”，可能丢失数据
+C:\Users\18242\Desktop\c++\CPQSSAP\Polynomial.cpp(223,22): warning C4267: “初始化”: 从“size_t”转换到“unsigned int”，可能丢失数据
+C:\Users\18242\Desktop\c++\CPQSSAP\Polynomial.cpp(243,22): warning C4267: “初始化”: 从“size_t”转换到“unsigned int”，可能丢失数据
+C:\Users\18242\Desktop\c++\CPQSSAP\Polynomial.cpp(276,11): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+C:\Users\18242\Desktop\c++\CPQSSAP\Polynomial.cpp(298,11): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+C:\Users\18242\Desktop\c++\CPQSSAP\Polynomial.cpp(307,11): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+C:\Users\18242\Desktop\c++\CPQSSAP\Polynomial.cpp(308,11): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+C:\Users\18242\Desktop\c++\CPQSSAP\Polynomial.cpp(311,40): warning C4018: “<”: 有符号/无符号不匹配
+C:\Users\18242\Desktop\c++\CPQSSAP\Polynomial.cpp(318,13): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+C:\Users\18242\Desktop\c++\CPQSSAP\Polynomial.cpp(343,11): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+C:\Users\18242\Desktop\c++\CPQSSAP\Polynomial.cpp(344,11): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+C:\Users\18242\Desktop\c++\CPQSSAP\Polynomial.cpp(302): warning C4717: “Polynomial::IFFT”: 如递归所有控件路径，函数将导致运行时堆栈溢出
   NTRUEncrypt.vcxproj -> C:\Users\18242\Desktop\c++\CPQSSAP\x64\Debug\NTRUEncrypt.exe
