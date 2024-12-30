@@ -30,7 +30,7 @@ public:
     bool test_If_Inversable(unsigned int mod);
     bool test_If_Inversable(const std::vector<int>& coeffs, unsigned int mod);
     // 计算多项式的模运算 (对 x^d - 1 取模)
-    std::vector<int> poly_mod_XN(std::vector<int>& poly, unsigned int d, unsigned int p);
+    static std::vector<int> poly_mod_XN(std::vector<int>& poly, unsigned int d, unsigned int p);
     std::vector<int> poly_mod_p(std::vector<int>& poly, unsigned int p);
     // 计算两个多项式的最大公因数
     std::vector<int> poly_gcd(const std::vector<int>& a, const std::vector<int>& b);
@@ -48,12 +48,14 @@ public:
     void IFFT(std::vector <cd>& a) ;//但是还有些问题，现在还是在实数域上面实现的卷积
 
     Polynomial operator*(const Polynomial& other) ;//多项式卷积
-    Polynomial Pol_mul(const Polynomial& p) ;//但是还有些问题，现在还是在实数域上面实现的卷积
+    Polynomial Pol_mul(const Polynomial& p, int mod) ;//但是还有些问题，现在还是在实数域上面实现的卷积
+    std::vector<int> Pol_mul_Vec(const Polynomial& other, int mod);
     
     std::vector<int> get_coeffs() const;
     void print_pol();
     Polynomial Cal_Inverse_Of_Polynomial(std::vector<int> pol, unsigned int q, unsigned int degree);
     Polynomial Cal_Inverse_Of_Polynomial(unsigned int mod);
+    std::vector<int>  CalVec_Inverse_Of_Polynomial(unsigned int mod);
     int Poly_qmi(int a, int n, int mod);
     void NTT_pre(int bit, std::vector<int>& rev);
     void NTT(std::vector<int>& F, int len, int on, std::vector<int>& rev, int g, int gi, int mod);

@@ -57,9 +57,10 @@ std::vector<int> Polynomial::poly_mod_XN(std::vector<int>& poly, unsigned int d,
     int len = poly.size();
     for (int i = d; i < len; i++) {
         int j = i % d;
-        if (poly[i] != 0) {
-            poly[j] = (poly[j] + poly[i]) % p;
-        }
+        poly[j] = (poly[j] + poly[i]) % p;
+    }
+    for (int i = 0; i < d; i++) {
+        poly[i] %= p;
     }
     poly.resize(d);
     return poly;
@@ -101,13 +102,34 @@ Polynomial Polynomial::Cal_Inverse_Of_Polynomial(unsigned int mod) {
     NTT_solve(n, a, b, mod, rev, ta, tb, g, gi);
     //for (int i = 0; i < 3 * degree + 1; i++) std::cout << b[i] << " ";
     //std::cout << std::endl;
-    b = poly_mod_XN(b, degree, mod);
+    b.resize(n);
+    for (int i = 0; i < n; i++) b[i] -= mod / 2;
 
     return Polynomial(degree, q, p, b);
 }
 
+std::vector<int> Polynomial::CalVec_Inverse_Of_Polynomial(unsigned int mod) {
+    const int n = degree;
+    std::cout << "n:" << n << std::endl;
+    std::vector<int> a(3 * n + 1, 0);
+    for (int i = 0; i < n; i++) a[i] = coeffs[i];
+    std::vector<int> b(3 * n + 1, 0);
+    int g = 3, gi = 46;
+    std::vector<int> rev(3 * n + 1, 0);
+    std::vector<int> ta(3 * n + 1, 0);
+    std::vector<int> tb(3 * n + 1, 0);
+
+    NTT_solve(n, a, b, mod, rev, ta, tb, g, gi);
+    //for (int i = 0; i < 3 * degree + 1; i++) std::cout << b[i] << " ";
+    //std::cout << std::endl;
+    b.resize(n);
+    for (int i = 0; i < n; i++) b[i] -= mod / 2;
+
+    return b;
+}
+
 Polynomial Polynomial::Cal_Inverse_Of_Polynomial(std::vector<int> pol, unsigned int q, unsigned int degree) {
-    return Polynomial(degree, q, p, { 0 });
+    return Cal_Inverse_Of_Polynomial(q);
     
 }
 
@@ -131,7 +153,7 @@ void Polynomial::NTT_solve(int len, std::vector<int>& a, std::vector<int>& b, in
     NTT(ta, l, 1, rev, g, gi, mod);
     NTT(tb, l, 1, rev, g, gi, mod);
     for (int i = 0; i < l; ++i) {
-        ta[i] = tb[i] * ((2 - ta[i] * tb[i]) % mod) % mod;
+        ta[i] = tb[i] * (((2 - ta[i] * tb[i]) % mod + mod) % mod) % mod;
     }
     NTT(ta, l, 0, rev, g, gi, mod);
     int inv = Poly_qmi(l, mod - 2, mod);
@@ -172,7 +194,7 @@ void Polynomial::NTT(std::vector<int>& F, int len, int on, std::vector<int> & re
                 int u = F[k];
                 int v = gg * F[k + i / 2] % mod;
                 F[k] = (u + v) % mod;
-                F[k + i / 2] = (u - v) % mod;
+                F[k + i / 2] = (u - v + mod) % mod;
                 gg = gg * gn % mod;
             }
         }
@@ -265,7 +287,7 @@ std::vector<int> Polynomial::get_coeffs() const {
 
 void Polynomial::print_pol() {
     std::vector<int> tmp = this->get_coeffs();
-    printf("The sk is : ");
+    std::cout << tmp.size() << std::endl;
     for (int i = 0; i < tmp.size(); i++) {
         printf("%d ", tmp[i]);
     }
@@ -303,6 +325,7 @@ void Polynomial::IFFT(std::vector <cd>& a) {
 
 Polynomial Polynomial::operator*(const Polynomial& other)  {
     std::vector<int> A = get_coeffs();
+    int deg = A.size();
     std::vector<int> B = other.get_coeffs();
     int m = A.size();
     int n = B.size();
@@ -315,38 +338,38 @@ Polynomial Polynomial::operator*(const Polynomial& other)  {
             C[i + j - degree] += A[i] * B[j];
         }
     }
-    int deg = C.size();
     return Polynomial(deg, q, p, C);
 }
-Polynomial Polynomial::Pol_mul(const Polynomial& other) {
-    /*std::vector<int> A = get_coeffs();
+Polynomial Polynomial::Pol_mul(const Polynomial& other, int mod) {
+    std::vector<int> A = this->coeffs;
+    int d = A.size();
     std::vector<int> B = other.get_coeffs();
     int m = A.size();
+    
     int n = B.size();
-    std::cout << "m: " << m << " n : " << n << std::endl;
-    std::vector<int> C(NTRU::N, 0);
-    std::cout << "NTRUN= " << NTRU::N << std::endl;
+    std::cout << m << " " << n << std::endl;
+    std::vector<int> C(251 * 2 - 1);
     for (int i = 0; i < m; i++) {
-        for (int j = 0; j < n && i + j < NTRU::N; j++) {
+        for (int j = 0; j < n; j++) {
             C[i + j] += A[i] * B[j];
         }
-        for (int j = std::max(0, int(NTRU::N - i)); j < n; j++) {
-            C[i + j - NTRU::N] += A[i] * B[j];
-        }
     }
-    int deg = C.size();
-    return Polynomial(deg, this->q, this->p, -1, -1, C);*/
-    int d = this->degree;
-    int p = this->p;
-    std::vector<int> A = get_coeffs();
+    return Polynomial(251, q, p, poly_mod_XN(C, 251, mod));
+}
+
+std::vector<int> Polynomial::Pol_mul_Vec(const Polynomial& other, int mod) {
+    std::vector<int> A = this->coeffs;
+    int d = A.size();
     std::vector<int> B = other.get_coeffs();
     int m = A.size();
+
     int n = B.size();
+    std::cout << m << " " << n << std::endl;
     std::vector<int> C(degree * 2 - 1);
     for (int i = 0; i < m; i++) {
         for (int j = 0; j < n; j++) {
             C[i + j] += A[i] * B[j];
         }
     }
-    return Polynomial(d, q, p, poly_mod_XN(C, d, p));
+    return poly_mod_XN(C, d, mod);
 }
